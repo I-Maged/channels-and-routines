@@ -20,8 +20,10 @@ func main() {
 	}
 
 	for l := range c {
-		time.Sleep(5 * time.Second)
-		go connect(l, c)
+		go func(link string) {
+			time.Sleep(5 * time.Second)
+			connect(link, c)
+		}(l)
 	}
 
 }
