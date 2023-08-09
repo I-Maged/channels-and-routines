@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -10,8 +11,7 @@ func main() {
 		"http://facebook.com/",
 		"http://youtube.com/",
 		"http://github.com/",
-		"http://google.com/",
-		"http://sodfughoidsfuhgsidufhg.com/"}
+		"http://google.com/"}
 
 	c := make(chan string)
 
@@ -19,8 +19,9 @@ func main() {
 		go connect(link, c)
 	}
 
-	for i := 0; i < len(links); i++ {
-		fmt.Println(<-c)
+	for l := range c {
+		time.Sleep(5 * time.Second)
+		go connect(l, c)
 	}
 
 }
@@ -30,10 +31,10 @@ func connect(link string, c chan string) {
 
 	if err != nil {
 		fmt.Println(link, "is down")
-		c <- "Channel says link is down"
+		c <- link
 		return
 	}
 
 	fmt.Println(link, "is connecting")
-	c <- "Channel says link is connecting"
+	c <- link
 }
